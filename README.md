@@ -72,7 +72,7 @@ telemetria se incorporan mediante los aportes de los otros integrantes.
 
 ## Registro de IA — aporte Rol 1
 
-- Herramienta: Codex, 08/11/2026. Integrante: completar nombre y legajo.
+- Integrante: Ramirez Pablo Nicolas, 28856.
 - Consultas: lectura de los cinco documentos de roles y desarrollo de Rol 1;
   revision de la consigna original y del repositorio para aportar individualmente.
 - Asistencia: implementacion inicial, adaptacion de lectura segura, pruebas y documentacion.
