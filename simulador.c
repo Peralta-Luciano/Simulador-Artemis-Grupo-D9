@@ -124,5 +124,10 @@ void mostrar_telemetria(const resultados *res, const instante_vuelo *caja_negra,
    y Punto D con la telemetria. No devuelve nada. */
 void mostrar_reporte_completo(const entradas *mision, const resultados *res, const instante_vuelo *caja_negra, int cantidad_pasos)
 {
-    (void)mision; (void)res; (void)caja_negra; (void)cantidad_pasos;
+    printf("\n==============================================\n");
+    printf("   REPORTE DE MISION ARTEMIS - REINGRESO\n");
+    printf("==============================================\n");
+    mostrar_resultados_analiticos(mision, res);          /* Puntos A, B y C (Rol 2) */
+    mostrar_telemetria(res, caja_negra, cantidad_pasos); /* Punto D, tabla y pico G */
+    printf("\n==============================================\n");
 }
