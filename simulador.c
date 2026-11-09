@@ -82,7 +82,42 @@ int ejecutar_simulacion_dinamica(const entradas *mision, instante_vuelo *caja_ne
    y el pico maximo de fuerzas G. No devuelve nada. */
 void mostrar_telemetria(const resultados *res, const instante_vuelo *caja_negra, int cantidad_pasos)
 {
-    (void)res; (void)caja_negra; (void)cantidad_pasos;
+    int i;
+    int indice_pico = 0;   /* fila con mas fuerzas G */
+    int salto;             /* cada cuantas filas se imprime */
+
+    printf("\n--- PUNTO D: Analisis del angulo de reingreso ---\n");
+    printf("  %s\n", res->mensaje_falla);
+
+    if (cantidad_pasos <= 0) {
+        printf("\n  (No hay datos de telemetria registrados)\n");
+        return;
+    }
+
+    salto = cantidad_pasos / FILAS_TABLA;
+    if (salto < 1) {
+        salto = 1;
+    }
+
+    printf("\n--- CAJA NEGRA: TELEMETRIA ---\n");
+    printf("  %10s | %14s | %15s | %10s\n", "Tiempo (s)", "Altitud (m)", "Velocidad (m/s)", "Fuerzas G");
+    printf("  -----------+----------------+-----------------+-----------\n");
+
+    /* recorre todas las filas validas: busca el pico e imprime ~FILAS_TABLA filas */
+    for (i = 0; i < cantidad_pasos; i++) {
+        if (caja_negra[i].fuerzas_g > caja_negra[indice_pico].fuerzas_g) {
+            indice_pico = i;
+        }
+        if (i % salto == 0 || i == cantidad_pasos - 1) {
+            printf("  %10.1f | %14.1f | %15.2f | %10.2f\n",
+                   caja_negra[i].t_actual, caja_negra[i].h_actual,
+                   caja_negra[i].v_actual, caja_negra[i].fuerzas_g);
+        }
+    }
+
+    printf("\n  Pico maximo de fuerzas G: %.2f g a %.1f m de altitud (t = %.1f s)\n",
+           caja_negra[indice_pico].fuerzas_g, caja_negra[indice_pico].h_actual,
+           caja_negra[indice_pico].t_actual);
 }
 
 /* Arma el reporte completo de la mision: Puntos A, B, C (Rol 2)
