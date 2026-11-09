@@ -55,13 +55,11 @@ Desde la raiz del repositorio, con GCC:
 ```sh
 gcc -Wall -Wextra -std=c99 -pedantic -I. pruebas/test_rol1.c pruebas/stub_rol2.c simulador.c validaciones.c -o test_rol1 -lm
 ./test_rol1
-python pruebas/verificar_rol1.py
 ```
 
 En PowerShell, ejecutar `.\test_rol1.exe`. El programa prueba decimales, enteros,
-los nueve valores oficiales y la carga personalizada. El verificador comprueba
-43 casos, incluidos errores de formato, rango, coherencia y cierre de entrada.
-Tambien admite la ruta de un ejecutable como argumento.
+los nueve valores oficiales y la carga personalizada. Se pueden probar entradas
+incorrectas, valores fuera de rango y datos incoherentes desde la consola.
 
 El archivo `pruebas/stub_rol2.c` permite enlazar las pruebas mientras falta
 `mostrar_resultados_analiticos` del Rol 2; no debe incluirse al enlazar con su
