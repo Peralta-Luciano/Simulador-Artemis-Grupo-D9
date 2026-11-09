@@ -70,7 +70,7 @@ implementacion real.
 Esta entrega implementa exclusivamente Rol 1. El menu, los calculos fisicos y la
 telemetria se incorporan mediante los aportes de los otros integrantes.
 
-## Registro de IA — aporte Rol 1
+## aporte Rol 1
 
 - Integrante: Ramirez Pablo Nicolas, 28856.
 - Consultas: lectura de los cinco documentos de roles y desarrollo de Rol 1;
