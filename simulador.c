@@ -21,6 +21,7 @@ int ejecutar_simulacion_dinamica(const entradas *mision, instante_vuelo *caja_ne
     double rho;                                          /* densidad del aire */
     double a_inst;                                       /* desaceleracion por arrastre */
     int pasos = 0;                                       /* proxima fila libre */
+    int rebotando = 0;                                   /* 1 = la capsula ya sube por rebote */
 
     /* --- Punto D: evaluar la ventana del angulo de reingreso --- */
     if (mision->angulo_reingreso < VENTANA_ANGULO_MIN) {
@@ -40,6 +41,11 @@ int ejecutar_simulacion_dinamica(const entradas *mision, instante_vuelo *caja_ne
     /* --- Ciclo de integracion paso a paso (Euler, dt = 1 s) --- */
     while (h > mision->h_paracaidas && v > mision->v_paracaidas && pasos < LIMITE_ARREGLO) {
 
+        /* en un rebote se registran solo PASOS_TOTAL_REBOTE filas */
+        if (res->estado_mision == ESTADO_REBOTE && pasos >= PASOS_TOTAL_REBOTE) {
+            break;
+        }
+
         rho = DENSIDAD_BASE * exp(-h / CONSTANTE_ALTURA);
         a_inst = (0.5 * rho * v * v * COEF_ARRASTRE_AREA) / mision->masa;
 
@@ -49,12 +55,21 @@ int ejecutar_simulacion_dinamica(const entradas *mision, instante_vuelo *caja_ne
         caja_negra[pasos].v_actual = v;
         caja_negra[pasos].fuerzas_g = a_inst / GRAVEDAD;
 
+        /* a partir de PASOS_ANTES_REBOTE la capsula empieza a subir */
+        if (res->estado_mision == ESTADO_REBOTE && pasos >= PASOS_ANTES_REBOTE) {
+            rebotando = 1;
+        }
+
         v = v - a_inst * dt;
         if (v < mision->v_paracaidas) {
             v = mision->v_paracaidas;
         }
 
-        h = h - v * sin(rad) * dt;
+        if (rebotando) {
+            h = h + v * sin(rad) * dt;
+        } else {
+            h = h - v * sin(rad) * dt;
+        }
 
         t = t + dt;
         pasos++;
