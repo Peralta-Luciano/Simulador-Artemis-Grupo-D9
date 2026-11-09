@@ -4,6 +4,63 @@
 #include "simulador.h"
 #include "validaciones.h"
 
+/* ROL 1 - Carga de mision. Integrar solo esta seccion. */
+
+/* Recibe la direccion de una mision y carga los nueve valores oficiales.
+   Modifica la estructura original; no devuelve un valor. */
+void cargar_mision_historica(entradas *mision)
+{
+    mision->masa = 10400.0;
+    mision->h_inicial = 120000.0;
+    mision->v_inicial = 11000.0;
+    mision->angulo_reingreso = 6.2;
+    mision->tiempo_frenado = 400.0;
+    mision->h_paracaidas = 2500.0;
+    mision->v_paracaidas = 25.0;
+    mision->v_impacto = 8.0;
+    mision->hundimiento = 1.50;
+
+    printf("\n>> Se cargaron los datos oficiales de la mision Artemis.\n");
+}
+
+/* Recibe una mision y pide sus parametros mediante validaciones.c.
+   Repite cada campo incoherente y modifica la estructura original. */
+void configurar_mision_personalizada(entradas *mision)
+{
+    printf("\n=== CONFIGURACION DE MISION PERSONALIZADA ===\n");
+
+    mision->masa = pedir_double_seguro("Masa de la capsula [1000 - 50000] kg: ", 1000.0, 50000.0);
+    mision->h_inicial = pedir_double_seguro("Altitud inicial de reingreso [10000 - 150000] m: ", 10000.0, 150000.0);
+    mision->v_inicial = pedir_double_seguro("Velocidad inicial [1000 - 20000] m/s: ", 1000.0, 20000.0);
+    mision->angulo_reingreso = pedir_double_seguro("Angulo de reingreso [0.1 - 89.9] grados: ", 0.1, 89.9);
+    mision->tiempo_frenado = pedir_double_seguro("Duracion del frenado [10 - 2000] s: ", 10.0, 2000.0);
+
+    do {
+        mision->h_paracaidas = pedir_double_seguro("Altitud de apertura de paracaidas [100 - 50000] m: ", 100.0, 50000.0);
+        if (mision->h_paracaidas >= mision->h_inicial) {
+            printf("  [ERROR] Incoherencia fisica: la altitud de paracaidas debe ser MENOR que la altitud inicial (%.2f m).\n", mision->h_inicial);
+        }
+    } while (mision->h_paracaidas >= mision->h_inicial);
+
+    do {
+        mision->v_paracaidas = pedir_double_seguro("Velocidad al abrir paracaidas [5 - 1000] m/s: ", 5.0, 1000.0);
+        if (mision->v_paracaidas >= mision->v_inicial) {
+            printf("  [ERROR] Incoherencia fisica: la velocidad de paracaidas debe ser MENOR que la velocidad inicial (%.2f m/s).\n", mision->v_inicial);
+        }
+    } while (mision->v_paracaidas >= mision->v_inicial);
+
+    do {
+        mision->v_impacto = pedir_double_seguro("Velocidad de impacto en el agua [0.1 - 500] m/s: ", 0.1, 500.0);
+        if (mision->v_impacto >= mision->v_paracaidas) {
+            printf("  [ERROR] Incoherencia fisica: la velocidad de impacto debe ser MENOR que la de paracaidas (%.2f m/s).\n", mision->v_paracaidas);
+        }
+    } while (mision->v_impacto >= mision->v_paracaidas);
+
+    mision->hundimiento = pedir_double_seguro("Hundimiento en el agua [0.1 - 20] m: ", 0.1, 20.0);
+
+    printf("\n>> Parametros cargados correctamente.\n");
+}
+
 /* ============================================================
    ROL 3 - Simulacion dinamica y telemetria (Punto D)
    ============================================================ */
