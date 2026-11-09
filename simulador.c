@@ -13,9 +13,14 @@
    Devuelve la cantidad de filas cargadas en caja_negra. */
 int ejecutar_simulacion_dinamica(const entradas *mision, instante_vuelo *caja_negra, resultados *res)
 {
-    int pasos = 0;
-
-    (void)caja_negra;
+    double rad = mision->angulo_reingreso * PI / 180.0;  /* angulo en radianes */
+    double t = 0.0;                                      /* tiempo [s] */
+    double dt = 1.0;                                     /* paso de integracion [s] */
+    double h = mision->h_inicial;                        /* altitud actual [m] */
+    double v = mision->v_inicial;                        /* velocidad actual [m/s] */
+    double rho;                                          /* densidad del aire */
+    double a_inst;                                       /* desaceleracion por arrastre */
+    int pasos = 0;                                       /* proxima fila libre */
 
     /* --- Punto D: evaluar la ventana del angulo de reingreso --- */
     if (mision->angulo_reingreso < VENTANA_ANGULO_MIN) {
@@ -30,6 +35,29 @@ int ejecutar_simulacion_dinamica(const entradas *mision, instante_vuelo *caja_ne
         res->estado_mision = ESTADO_NOMINAL;
         snprintf(res->mensaje_falla, sizeof(res->mensaje_falla),
                  "MISION EXITOSA: reingreso dentro de la ventana segura (5.5 a 7.0 grados).");
+    }
+
+    /* --- Ciclo de integracion paso a paso (Euler, dt = 1 s) --- */
+    while (h > mision->h_paracaidas && v > mision->v_paracaidas && pasos < LIMITE_ARREGLO) {
+
+        rho = DENSIDAD_BASE * exp(-h / CONSTANTE_ALTURA);
+        a_inst = (0.5 * rho * v * v * COEF_ARRASTRE_AREA) / mision->masa;
+
+        /* se guarda el estado ANTES de actualizarlo */
+        caja_negra[pasos].t_actual = t;
+        caja_negra[pasos].h_actual = h;
+        caja_negra[pasos].v_actual = v;
+        caja_negra[pasos].fuerzas_g = a_inst / GRAVEDAD;
+
+        v = v - a_inst * dt;
+        if (v < mision->v_paracaidas) {
+            v = mision->v_paracaidas;
+        }
+
+        h = h - v * sin(rad) * dt;
+
+        t = t + dt;
+        pasos++;
     }
 
     return pasos;
