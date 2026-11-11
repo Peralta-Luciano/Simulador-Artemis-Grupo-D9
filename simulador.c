@@ -102,18 +102,17 @@ void procesar_calculos_analiticos(const entradas *mision, resultados *res)
 
 void mostrar_resultados_analiticos(const entradas *mision, const resultados *res)
 {
-    (void)mision;
-
     printf("\n=== RESULTADOS DE FISICA ANALITICA ===\n");
 
-    printf("A) Trabajo de rozamiento: %.2f J\n",
-           res->trabajo_rozamiento);
+    printf("A) Trabajo de rozamiento: %.4e J (%.2f GJ)\n",
+           res->trabajo_rozamiento, res->trabajo_rozamiento / 1.0e9);
+    printf("   (negativo: el rozamiento le quita energia a la capsula)\n");
 
-    printf("B) Desaceleracion media: %.4f m/s^2\n",
-           res->desaceleracion_media);
+    printf("B) Desaceleracion media: %.4f m/s^2 (%.2f g)\n",
+           res->desaceleracion_media, res->desaceleracion_media / GRAVEDAD);
 
-    printf("C) Fuerza de amerizaje: %.2f N\n",
-           res->f_impacto);
+    printf("C) Fuerza de amerizaje: %.2f N (%.2f veces el peso de la nave)\n",
+           res->f_impacto, res->f_impacto / (mision->masa * GRAVEDAD));
 }
 
 /* ============================================================
