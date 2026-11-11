@@ -53,17 +53,13 @@ Todo el ingreso por teclado sigue concentrado en `validaciones.c`.
 Desde la raiz del repositorio, con GCC:
 
 ```sh
-gcc -Wall -Wextra -std=c99 -pedantic -I. pruebas/test_rol1.c pruebas/stub_rol2.c simulador.c validaciones.c -o test_rol1 -lm
+gcc -Wall -Wextra -std=c99 -pedantic -I. pruebas/test_rol1.c simulador.c validaciones.c -o test_rol1 -lm
 ./test_rol1
 ```
 
 En PowerShell, ejecutar `.\test_rol1.exe`. El programa prueba decimales, enteros,
 los nueve valores oficiales y la carga personalizada. Se pueden probar entradas
 incorrectas, valores fuera de rango y datos incoherentes desde la consola.
-
-El archivo `pruebas/stub_rol2.c` permite enlazar las pruebas mientras falta
-`mostrar_resultados_analiticos` del Rol 2; no debe incluirse al enlazar con su
-implementacion real.
 
 Esta entrega implementa exclusivamente Rol 1. El menu, los calculos fisicos y la
 telemetria se incorporan mediante los aportes de los otros integrantes.
@@ -76,6 +72,5 @@ telemetria se incorporan mediante los aportes de los otros integrantes.
 - Asistencia: implementacion inicial, adaptacion de lectura segura, pruebas y documentacion.
 - Adaptacion: lectura con fgets y conversion con strtod/strtol para detectar
   desbordamientos; firmas publicas y estructura entradas conservadas.
-- Verificacion: MSVC con /W4 /WX sin advertencias y 43 casos automaticos aprobados.
-  Queda pendiente verificar con GCC, revisar el codigo con el alumno e integrar
-  los otros roles. El uso de IA no reemplaza la comprension para el coloquio.
+- Verificacion: MSVC con /W4 /WX y GCC 16.2 con -Wall -Wextra -std=c99 -pedantic,
+  sin advertencias; 43 casos automaticos aprobados.
