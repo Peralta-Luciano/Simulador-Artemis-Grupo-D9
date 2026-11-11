@@ -5,14 +5,6 @@ de una nave Artemis. Trabajo práctico de Algoritmos y Estructuras de Datos (UTN
 
 **Grupo D9**
 
-| Integrante | Rol |
-|---|---|
-| Ramírez Pablo Nicolás (legajo 28856) | Rol 1 — Validaciones y carga |
-| Peralta Luciano (legajo: completar) | Rol 2/4 (completar) |
-| Rojas Gonzalo (legajo: completar) | Rol (completar) |
-| Vaernet Bianca Estefanía (legajo: completar) | Rol (completar) |
-
-Comisión: *(completar)*
 
 ## Archivos del proyecto
 
@@ -146,27 +138,3 @@ desintegración. No hay que restringir la carga a la ventana segura 5.5–7 grad
 excede la capacidad del arreglo, para que sus restos no contaminen la siguiente lectura.
 Al cerrarse la entrada se muestra un mensaje y se termina con `EXIT_FAILURE`, sin bucles.
 En una consola Windows, EOF normalmente se ingresa con Ctrl+Z seguido de Enter.
-
-### Adaptación respecto del ejemplo del documento
-
-El documento enseña `scanf` numérico más `getchar`. Esta versión usa `fgets` para leer
-la línea completa y `strtod`/`strtol` para convertirla. Así se comprueba `errno == ERANGE`
-cuando el número no es representable, antes de convertirlo a `int`. `fin` señala el primer
-carácter que no se convirtió: si no es el final de la cadena, hay texto sobrante.
-`isfinite` rechaza NaN e infinito. Una función auxiliar `static`, `leer_linea`, comparte
-la lectura entre ambos validadores sin cambiar los encabezados públicos.
-
-Esta adaptación agrega conceptos a los explicados en el documento. Si la cátedra exige
-específicamente usar `scanf`, habrá que ajustar esa implementación a la restricción.
-Todo el ingreso por teclado sigue concentrado en `validaciones.c`.
-
-## aporte Rol 1
-
-- Integrante: Ramirez Pablo Nicolas, 28856.
-- Consultas: lectura de los cinco documentos de roles y desarrollo de Rol 1;
-  revision de la consigna original y del repositorio para aportar individualmente.
-- Asistencia: implementacion inicial, adaptacion de lectura segura, pruebas y documentacion.
-- Adaptacion: lectura con fgets y conversion con strtod/strtol para detectar
-  desbordamientos; firmas publicas y estructura entradas conservadas.
-- Verificacion: MSVC con /W4 /WX y GCC 16.2 con -Wall -Wextra -std=c99 -pedantic,
-  sin advertencias; 43 casos automaticos aprobados.
