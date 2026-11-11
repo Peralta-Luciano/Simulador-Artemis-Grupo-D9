@@ -62,6 +62,61 @@ void configurar_mision_personalizada(entradas *mision)
 }
 
 /* ============================================================
+   ROL 2 - Fisica Analitica
+   Puntos A, B y C: Energia, Desaceleracion e Impacto
+   ============================================================ */
+double calcular_trabajo_rozamiento(const entradas *mision)
+{   
+    double energia_inicial = 0.5 * mision->masa *
+                        mision->v_inicial * mision->v_inicial +
+                        mision->masa * GRAVEDAD * mision->h_inicial;
+
+    double energia_final = 0.5 * mision->masa *
+                       mision->v_paracaidas * mision->v_paracaidas +
+                       mision->masa * GRAVEDAD * mision->h_paracaidas;
+
+    return energia_final - energia_inicial;
+}
+
+double calcular_desaceleracion_media(const entradas *mision)
+{
+    return (mision->v_inicial - mision->v_paracaidas)
+       / mision->tiempo_frenado;
+}
+
+double calcular_fuerza_amerizaje(const entradas *mision)
+{
+    double fuerza_frenado = (0.5 * mision->masa *
+                        mision->v_impacto * mision->v_impacto)
+                        / mision->hundimiento;
+    
+    return fuerza_frenado + mision->masa * GRAVEDAD;
+}
+
+void procesar_calculos_analiticos(const entradas *mision, resultados *res)
+{
+    res->trabajo_rozamiento = calcular_trabajo_rozamiento(mision);
+    res->desaceleracion_media = calcular_desaceleracion_media(mision);
+    res->f_impacto = calcular_fuerza_amerizaje(mision);
+}
+
+void mostrar_resultados_analiticos(const entradas *mision, const resultados *res)
+{
+    (void)mision;
+
+    printf("\n=== RESULTADOS DE FISICA ANALITICA ===\n");
+
+    printf("A) Trabajo de rozamiento: %.2f J\n",
+           res->trabajo_rozamiento);
+
+    printf("B) Desaceleracion media: %.4f m/s^2\n",
+           res->desaceleracion_media);
+
+    printf("C) Fuerza de amerizaje: %.2f N\n",
+           res->f_impacto);
+}
+
+/* ============================================================
    ROL 3 - Simulacion dinamica y telemetria (Punto D)
    ============================================================ */
 
