@@ -1,0 +1,13 @@
+# Ejecutables
+simulador
+simulador.exe
+*.exe
+
+# Objetos
+*.o
+*.obj
+
+# Temporales de sistema / editor
+*.dSYM/
+.vscode/
+.DS_Store
